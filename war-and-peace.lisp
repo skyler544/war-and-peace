@@ -43,3 +43,12 @@ text."
 	      :if-exists :supersede ;; Overwrite the file
 	      :if-does-not-exist :create)
     (format stream "~S" content)))
+
+;; Program entry point
+(defun categorize-book ()
+  (write-to-file
+   (tokenized-book)
+   "categorization"))
+
+;; uncomment for interactive use
+(defvar *book* (tokenized-book))
