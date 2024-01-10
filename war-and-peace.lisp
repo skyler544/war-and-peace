@@ -34,7 +34,7 @@ text."
                            :test #'string-equal))
                  word-list))
 
-;; Auxiliary functions
+;; File output function
 (defun write-to-file (content filename)
   "Write `CONTENT' to `FILENAME', overwriting if necessary."
   (with-open-file
