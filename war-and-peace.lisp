@@ -3,6 +3,13 @@
   "Read `FILENAME' and return it as a list of lines."
   (uiop:read-file-lines filename))
 
+(defun read-book ()
+  (read-file "war-and-peace"))
+(defun peace-terms ()
+  (read-file "peace-terms"))
+(defun war-terms ()
+  (read-file "war-terms"))
+
 ;; Step 2: Tokenize text
 (defun tokenize-line (line)
   "Splits `LINE' on whitespace and removes punctuation and empty strings."
@@ -16,7 +23,8 @@ text."
   (remove nil (mapcar #'tokenize-line text)))
 
 (defun tokenized-book ()
-  (tokenize-text (read-file "war-and-peace")))
+  (tokenize-text (read-book)))
+
 
 ;; Step 3: Filter words
 (defun filter-words (word-list target-words)
