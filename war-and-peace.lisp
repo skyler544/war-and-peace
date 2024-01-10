@@ -5,10 +5,10 @@
 
 ;; Step 2: Tokenize text
 (defun tokenize-line (line)
-  "Splits `LINE' on whitespace and removes punctuation ."
-  (mapcar
-   #'str:remove-punctuation
-   (str:words line)))
+  "Splits `LINE' on whitespace and removes punctuation and empty strings."
+  (remove-if #'str:blankp (mapcar
+			   #'str:remove-punctuation
+			   (str:words line))))
 
 (defun tokenize-text (text)
   "Splits `TEXT' into lists of words corresponding to the lines from the
