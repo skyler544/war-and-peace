@@ -30,8 +30,9 @@ text."
 (defun filter-words (word-list target-words)
   "Filters words from a list based on another list (case insensitive)."
   (remove-if-not (lambda (word)
-		   (member word target-words
-		    :test #'string-equal)) word-list))
+                   (member word target-words
+                           :test #'string-equal))
+                 word-list))
 
 ;; Auxiliary functions
 (defun write-to-file (content filename)
