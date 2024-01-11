@@ -37,6 +37,17 @@ text."
 ;; 2. Iterate over the book until we find a chapter
 ;; 3. Start collecting lines until we find another chapter
 ;; 4. Recurse
+(defun split-chapters (book)
+  (let ((result ())
+        (current-chapter ()))
+    (loop for line in book
+          do (if (is-chapterp line)
+                 (progn
+                   (when current-chapter (push current-chapter result))
+                   (setf current-chapter line))
+                 (setf current-chapter (append current-chapter line))))
+    (push current-chapter result)
+    (reverse result)))
 
 ;; Filter words
 (defun filter-words (word-list target-words)
