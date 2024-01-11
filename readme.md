@@ -29,12 +29,12 @@ With Quicklisp installed, your environment should be ready to run this program.
 
 ## Program usage
 
-The program is executed via `launch.sh`. The program must be run from within this directory, or it will not find the files it needs. On the first run, Quicklisp will retrieve dependencies before loading the program. The result will be written to the file `categorization`.
+The program is executed via `launch`. The program must be run from within this directory, or it will not find the files it needs. On the first run, Quicklisp will retrieve dependencies before loading the program. The result will be written to the file `categorization`.
 
 Example:
 
 ```sh
 $ git clone https://github.com/skyler544/war-and-peace
 $ cd war-and-peace
-$ ./launch.sh
+$ ./launch
 ```
