@@ -25,6 +25,9 @@ text."
 (defun tokenized-book ()
   (tokenize-text (read-book)))
 
+(defun trimmed-book ()
+  (member '("CHAPTER" "1") (tokenized-book) :test 'equal))
+
 (defun is-chapterp (line)
   "A chapter starts with CHAPTER (case sensitive)."
   (equal "CHAPTER" (first line)))
