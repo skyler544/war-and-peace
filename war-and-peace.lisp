@@ -13,9 +13,9 @@
 ;; Step 2: Tokenize text
 (defun tokenize-line (line)
   "Splits `LINE' on whitespace and removes punctuation and empty strings."
-  (remove-if #'str:blankp (mapcar
-			   #'str:remove-punctuation
-			   (str:words line))))
+  (remove-if #'str:blankp
+             (mapcar #'str:remove-punctuation
+			  (str:words line))))
 
 (defun tokenize-text (text)
   "Splits `TEXT' into lists of words corresponding to the lines from the
@@ -25,8 +25,17 @@ text."
 (defun tokenized-book ()
   (tokenize-text (read-book)))
 
+(defun is-chapterp (line)
+  "A chapter starts with CHAPTER (case sensitive)."
+  (equal "CHAPTER" (first line)))
 
-;; Step 3: Filter words
+;; Step 3: Split by chapter
+;; 1. Tokenize the text
+;; 2. Iterate over the book until we find a chapter
+;; 3. Start collecting lines until we find another chapter
+;; 4. Recurse
+
+;; Filter words
 (defun filter-words (word-list target-words)
   "Filters words from a list based on another list (case insensitive)."
   (remove-if-not (lambda (word)
