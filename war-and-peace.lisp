@@ -28,7 +28,11 @@ text."
   (tokenize-text (read-book)))
 
 (defun trimmed-book ()
-  (member '("CHAPTER" "1") (tokenized-book) :test 'equal))
+  "Remove the parts of the file that don't belong to a chapter."
+  (let ((book (tokenized-book)))
+    (reverse (set-difference
+     (member '("CHAPTER" "1") book :test 'equal)
+     (member '("END" "OF" "THE" "PROJECT" "GUTENBERG" "EBOOK" "WAR" "AND" "PEACE") book :test 'equal)))))
 
 (defun is-chapterp (line)
   "A chapter starts with CHAPTER (case sensitive)."
@@ -71,8 +75,8 @@ strings; each inner list is the content of a chapter split into words."
 ;; Program entry point
 (defun categorize-book ()
   (write-to-file
-   (tokenized-book)
+   (split-chapters (trimmed-book))
    "categorization"))
 
 ;; uncomment for interactive use
-(defvar *book* (tokenized-book))
+(defvar *book* (trimmed-book))
