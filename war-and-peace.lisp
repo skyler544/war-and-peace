@@ -1,4 +1,5 @@
 ;; Step 1: Read files
+;; ----------------------------------------------------
 (defun read-file (filename)
   "Read `FILENAME' and return it as a list of lines."
   (uiop:read-file-lines filename))
@@ -11,6 +12,7 @@
   (read-file "war-terms"))
 
 ;; Step 2: Tokenize text
+;; ----------------------------------------------------
 (defun tokenize-line (line)
   "Splits `LINE' on whitespace and removes punctuation and empty strings."
   (remove-if #'str:blankp
@@ -33,11 +35,10 @@ text."
   (equal "CHAPTER" (first line)))
 
 ;; Step 3: Split by chapter
-;; 1. Tokenize the text
-;; 2. Iterate over the book until we find a chapter
-;; 3. Start collecting lines until we find another chapter
-;; 4. Recurse
+;; ----------------------------------------------------
 (defun split-chapters (book)
+  "Splits `BOOK' into chapters. The return value is a list of lists of
+strings; each inner list is the content of a chapter split into words."
   (let ((result ())
         (current-chapter ()))
     (loop for line in book
@@ -57,7 +58,7 @@ text."
                            :test #'string-equal))
                  word-list))
 
-;; File output function
+;; File output
 (defun write-to-file (content filename)
   "Write `CONTENT' to `FILENAME', overwriting if necessary."
   (with-open-file
