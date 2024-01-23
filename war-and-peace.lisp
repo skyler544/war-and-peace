@@ -106,6 +106,5 @@ categorization function over each chapter."
   (let ((categorization (categorize-book)))
     (loop for index from 1 to (length categorization)
           do (format t
-              "Chapter ~S: ~A~%"
-              index (related-string (nth index categorization))))))
-
+                     "Chapter ~S: ~A~%"
+                     index (related-string (nth index categorization))))))
