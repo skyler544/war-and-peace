@@ -109,5 +109,3 @@ categorization function over each chapter."
               "Chapter ~S: ~A~%"
               index (related-string (nth index categorization))))))
 
-;; uncomment for interactive use
-(defvar *book* (trimmed-book))
