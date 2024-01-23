@@ -1,3 +1,9 @@
+;; The way this library works, this thread pool must be globally
+;; available. Throughout the program, instances of `mapcar' can be
+;; seamlessly replaced with a call to `lparallel:pmap' with `list' as
+;; the return type.
+(setf lparallel:*kernel* (lparallel:make-kernel 4))
+
 ;; Step 1: Read files
 ;; ----------------------------------------------------
 (defun read-file (filename)
@@ -16,13 +22,13 @@
 (defun tokenize-line (line)
   "Splits `LINE' on whitespace and removes punctuation and empty strings."
   (remove-if #'str:blankp
-             (mapcar #'str:remove-punctuation
-		     (str:words line))))
+             (lparallel:pmap 'list #'str:remove-punctuation
+                             (str:words line))))
 
 (defun tokenize-text (text)
   "Splits `TEXT' into lists of words corresponding to the lines from the
 text."
-  (remove nil (mapcar #'tokenize-line text)))
+  (remove nil (lparallel:pmap 'list #'tokenize-line text)))
 
 (defun tokenized-book ()
   "Read in the book and return it as a list of lists of strings."
@@ -79,8 +85,11 @@ categorization function over each chapter."
   (let ((book (split-chapters (trimmed-book)))
         (war (read-war-terms))
         (peace (read-peace-terms)))
-    ;; TODO multithreaded mapcar
-    (mapcar (lambda (chapter) (categorize-chapter chapter war peace)) book)))
+    ;; multithreaded mapcar
+    (lparallel:pmap 'list (lambda (chapter)
+                            (categorize-chapter
+                             chapter war peace))
+                    book)))
 
 ;; Step 5: Output and Utility Functions
 ;; ----------------------------------------------------
@@ -105,6 +114,5 @@ categorization function over each chapter."
   "Categorize the book and output the categorization to standard out."
   (let ((categorization (categorize-book)))
     (loop for index from 1 to (length categorization)
-          do (format t
-                     "Chapter ~S: ~A~%"
+          do (format t "Chapter ~S: ~A~%"
                      index (related-string (nth index categorization))))))
