@@ -25,6 +25,7 @@ text."
   (remove nil (mapcar #'tokenize-line text)))
 
 (defun tokenized-book ()
+  "Read in the book and return it as a list of lists of strings."
   (tokenize-text (read-book)))
 
 (defun trimmed-book ()
@@ -66,13 +67,15 @@ strings; each inner list is the content of a chapter split into words."
                  chapter))
 
 (defun categorize-chapter (chapter war peace)
+  "Categorize a chapter as war related or peace related."
   (cond ((> (length (filter-words war chapter))
             (length (filter-words peace chapter)))
          'war)
         (t 'peace)))
 
 (defun categorize-book ()
-  "Maps the categorization function over each chapter."
+  "Reads in the book, the war terms, and the peace tearm. Then maps the
+categorization function over each chapter."
   (let ((book (split-chapters (trimmed-book)))
         (war (read-war-terms))
         (peace (read-peace-terms)))
@@ -92,12 +95,14 @@ strings; each inner list is the content of a chapter split into words."
     (format stream "~S" content)))
 
 (defun related-string (item)
+  "Return war-related if `item' is war, else peace-related."
   (if (equal item 'war)
       "war-related"
       "peace-related"))
 
 ;; Program entry point
 (defun output-categorization ()
+  "Categorize the book and output the categorization to standard out."
   (let ((categorization (categorize-book)))
     (loop for index from 1 to (length categorization)
           do (format t
