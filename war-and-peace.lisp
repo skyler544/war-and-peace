@@ -6,9 +6,9 @@
 
 (defun read-book ()
   (read-file "war-and-peace"))
-(defun peace-terms ()
+(defun read-peace-terms ()
   (read-file "peace-terms"))
-(defun war-terms ()
+(defun read-war-terms ()
   (read-file "war-terms"))
 
 ;; Step 2: Tokenize text
@@ -17,7 +17,7 @@
   "Splits `LINE' on whitespace and removes punctuation and empty strings."
   (remove-if #'str:blankp
              (mapcar #'str:remove-punctuation
-			  (str:words line))))
+		     (str:words line))))
 
 (defun tokenize-text (text)
   "Splits `TEXT' into lists of words corresponding to the lines from the
@@ -34,12 +34,12 @@ text."
      (member '("CHAPTER" "1") book :test 'equal)
      (member '("END" "OF" "THE" "PROJECT" "GUTENBERG" "EBOOK" "WAR" "AND" "PEACE") book :test 'equal)))))
 
+;; Step 3: Split by chapter
+;; ----------------------------------------------------
 (defun is-chapterp (line)
   "A chapter starts with CHAPTER (case sensitive)."
   (equal "CHAPTER" (first line)))
 
-;; Step 3: Split by chapter
-;; ----------------------------------------------------
 (defun split-chapters (book)
   "Splits `BOOK' into chapters. The return value is a list of lists of
 strings; each inner list is the content of a chapter split into words."
@@ -48,20 +48,38 @@ strings; each inner list is the content of a chapter split into words."
     (loop for line in book
           do (if (is-chapterp line)
                  (progn
-                   (when current-chapter (push current-chapter result))
+                   (when current-chapter
+                     (push current-chapter result))
                    (setf current-chapter line))
                  (setf current-chapter (append current-chapter line))))
     (push current-chapter result)
     (reverse result)))
 
+;; Step 4: Categorize Chapters
+;; ----------------------------------------------------
 ;; Filter words
-(defun filter-words (word-list target-words)
+(defun filter-words (terms chapter)
   "Filters words from a list based on another list (case insensitive)."
   (remove-if-not (lambda (word)
-                   (member word target-words
+                   (member word terms
                            :test #'string-equal))
-                 word-list))
+                 chapter))
 
+(defun categorize-chapter (chapter war peace)
+  (cond ((> (length (filter-words war chapter))
+            (length (filter-words peace chapter)))
+         'war)
+        (t 'peace)))
+
+(defun categorize-book (book)
+  "Maps the categorization function over each chapter."
+  (let ((war (read-war-terms))
+        (peace (read-peace-terms)))
+    ;; TODO multithreaded mapcar
+    (mapcar (lambda (chapter) (categorize-chapter chapter war peace)) book)))
+
+;; Step 5: Output and Utility Functions
+;; ----------------------------------------------------
 ;; File output
 (defun write-to-file (content filename)
   "Write `CONTENT' to `FILENAME', overwriting if necessary."
