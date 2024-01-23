@@ -71,9 +71,10 @@ strings; each inner list is the content of a chapter split into words."
          'war)
         (t 'peace)))
 
-(defun categorize-book (book)
+(defun categorize-book ()
   "Maps the categorization function over each chapter."
-  (let ((war (read-war-terms))
+  (let ((book (split-chapters (trimmed-book)))
+        (war (read-war-terms))
         (peace (read-peace-terms)))
     ;; TODO multithreaded mapcar
     (mapcar (lambda (chapter) (categorize-chapter chapter war peace)) book)))
@@ -90,11 +91,18 @@ strings; each inner list is the content of a chapter split into words."
 	      :if-does-not-exist :create)
     (format stream "~S" content)))
 
+(defun related-string (item)
+  (if (equal item 'war)
+      "war-related"
+      "peace-related"))
+
 ;; Program entry point
-(defun categorize-book ()
-  (write-to-file
-   (split-chapters (trimmed-book))
-   "categorization"))
+(defun output-categorization ()
+  (let ((categorization (categorize-book)))
+    (loop for index from 1 to (length categorization)
+          do (format t
+              "Chapter ~S: ~A~%"
+              index (related-string (nth index categorization))))))
 
 ;; uncomment for interactive use
 (defvar *book* (trimmed-book))
