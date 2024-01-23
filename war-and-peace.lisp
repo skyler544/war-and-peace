@@ -4,6 +4,10 @@
 ;; the return type.
 (setf lparallel:*kernel* (lparallel:make-kernel 4))
 
+(defun pmapcar (func list)
+  "Wrapper function for parallel map."
+  (lparallel:pmap 'list func list))
+
 ;; Step 1: Read files
 ;; ----------------------------------------------------
 (defun read-file (filename)
@@ -22,13 +26,13 @@
 (defun tokenize-line (line)
   "Splits `LINE' on whitespace and removes punctuation and empty strings."
   (remove-if #'str:blankp
-             (lparallel:pmap 'list #'str:remove-punctuation
-                             (str:words line))))
+             (pmapcar #'str:remove-punctuation
+                      (str:words line))))
 
 (defun tokenize-text (text)
   "Splits `TEXT' into lists of words corresponding to the lines from the
 text."
-  (remove nil (lparallel:pmap 'list #'tokenize-line text)))
+  (remove nil (pmapcar #'tokenize-line text)))
 
 (defun tokenized-book ()
   "Read in the book and return it as a list of lists of strings."
@@ -64,32 +68,34 @@ strings; each inner list is the content of a chapter split into words."
 
 ;; Step 4: Categorize Chapters
 ;; ----------------------------------------------------
+(defun string-member (word wordlist)
+  "Wrapper function for finding strings in a list."
+  (member word wordlist :test #'string-equal))
+
 ;; Filter words
 (defun filter-words (terms chapter)
   "Filters words from a list based on another list (case insensitive)."
-  (remove-if-not (lambda (word)
-                   (member word terms
-                           :test #'string-equal))
-                 chapter))
+  (remove-if-not
+   (lambda (word) (string-member word terms))
+   chapter))
 
 (defun categorize-chapter (chapter war peace)
   "Categorize a chapter as war related or peace related."
-  (cond ((> (length (filter-words war chapter))
-            (length (filter-words peace chapter)))
-         'war)
-        (t 'peace)))
+  (if (> (length (filter-words war chapter))
+         (length (filter-words peace chapter)))
+      'war
+      'peace))
 
 (defun categorize-book ()
-  "Reads in the book, the war terms, and the peace tearm. Then maps the
+  "Reads in the book, the war terms, and the peace terms. Then maps the
 categorization function over each chapter."
   (let ((book (split-chapters (trimmed-book)))
         (war (read-war-terms))
         (peace (read-peace-terms)))
-    ;; multithreaded mapcar
-    (lparallel:pmap 'list (lambda (chapter)
-                            (categorize-chapter
-                             chapter war peace))
-                    book)))
+    (pmapcar
+     (lambda (chapter)
+       (categorize-chapter chapter war peace))
+     book)))
 
 ;; Step 5: Output and Utility Functions
 ;; ----------------------------------------------------
