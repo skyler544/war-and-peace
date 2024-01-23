@@ -15,7 +15,7 @@ $ sudo apt install sbcl
 Other distributions may or may not package SBCL; refer to the SBCL project's [getting started](https://www.sbcl.org/getting.html) page for more information.
 
 
-This program uses the [cl-str](https://github.com/vindarel/cl-str) library for string manipulation. [Quicklisp](https://www.quicklisp.org/beta/) is used for dependency management. Detailed instructions for installing and using Quicklisp may be found on that project's homepage, but here is a quickstart guide:
+This program uses the [cl-str](https://github.com/vindarel/cl-str) library for string manipulation and [lparallel](https://github.com/lmj/lparallel) for multithreading map operations. [Quicklisp](https://www.quicklisp.org/beta/) is used for installing and loading dependencies. Detailed instructions for installing and using Quicklisp may be found on that project's homepage, but here is a quickstart guide:
 
 ```sh
 $ curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
@@ -29,7 +29,7 @@ With Quicklisp installed, your environment should be ready to run this program.
 
 ## Program usage
 
-The program is executed via `run.sh`. The program must be run from within this directory, or it will not find the files it needs. On the first run, Quicklisp will retrieve dependencies before loading the program. The result will be written to the file `categorization`.
+The program is executed via `run.sh`. The program must be run from within this directory, or it will not find the files it needs. On the first run, Quicklisp will retrieve dependencies before loading the program. Subsequent runs should use the cached dependencies. The result will be written to standard out.
 
 Example:
 
