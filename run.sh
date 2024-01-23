@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sbcl --eval '(ql:quickload :str)' \
+sbcl --noinform \
+     --eval '(ql:quickload :str :silent t)' \
      --load 'war-and-peace.lisp' \
-     --eval '(categorize-book)' \
+     --eval '(output-categorization)' \
      --quit
