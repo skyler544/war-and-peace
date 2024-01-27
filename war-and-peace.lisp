@@ -70,11 +70,11 @@ insensitive)."
 (defun indices (search-terms chapter)
   "Return a list of indices from `chapter' where terms from
 `search-terms' occur."
-    (remove nil
+  (remove nil
           (pmapcar (lambda (term)
-                    (position term chapter
-                              :test 'string-equal))
-                  search-terms)))
+                     (position term chapter
+                               :test 'string-equal))
+                   search-terms)))
 
 (defun distance (i j)
   "Calculate the distance between i and j."
