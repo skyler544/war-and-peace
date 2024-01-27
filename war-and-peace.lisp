@@ -66,13 +66,14 @@ text."
 ;;         'war
 ;;         'peace)))
 
-(defun indices (search-terms chapter acc count)
+(defun indices (search-terms chapter)
   "Return a list of indices from `chapter' where terms from
 `search-terms' occur."
-  (cond ((null chapter) (reverse acc))
-        ((member (first chapter) search-terms :test 'equal)
-         (indices search-terms (rest chapter) (push count acc) (+ count 1)))
-        (t (indices search-terms (rest chapter) acc (+ count 1)))))
+    (remove nil
+          (pmapcar (lambda (term)
+                    (position term chapter
+                              :test 'string-equal))
+                  search-terms)))
 
 (defun distance (i j)
   "Calculate the distance between i and j."
@@ -90,7 +91,7 @@ between the indices."
 
 (defun calculate-category-density (category-words chapter)
   "Calculate the density of words from `category-words' that occur in `chapter'."
-  (let* ((indices (indices category-words chapter '() 0))
+  (let* ((indices (indices category-words chapter))
          (distances (rec-distances indices '()))
          (total-distance (reduce #'+ distances)))
     (if (zerop total-distance)
