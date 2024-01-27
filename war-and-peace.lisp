@@ -47,15 +47,16 @@ text."
 
 ;; Split by chapter
 ;; ----------------------------------------------------
-;; (defun string-member (word wordlist)
-;;   "Wrapper function for finding strings in a list."
-;;   (member word wordlist :test #'string-equal))
+(defun filter-words (terms chapter)
+  "Filters words from `chapter' that also occur in `terms' (case
+insensitive)."
+  (remove-if-not
+   (lambda (word) (member word terms :test 'string-equal))
+   chapter))
 
-;; (defun filter-words (terms chapter)
-;;   "Filters words from a list based on another list (case insensitive)."
-;;   (remove-if-not
-;;    (lambda (word) (string-member word terms))
-;;    chapter))
+(defun overlap-coefficient (terms chapter)
+  (/ (length (filter-words terms chapter))
+     (min (length terms) (length chapter))))
 
 ;; (defun categorize-chapter (chapter)
 ;;   "Categorize a chapter as war related or peace related."
