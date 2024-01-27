@@ -21,13 +21,14 @@
 (defun read-war-terms ()
   (read-file "war-terms"))
 
+(defun log-expression (expr)
+  (format t "~S~%" expr))
+
 ;; Tokenize text
 ;; ----------------------------------------------------
 (defun tokenize-line (line)
   "Splits `LINE' on whitespace and removes punctuation and empty strings."
-  (remove-if #'str:blankp
-             (pmapcar #'str:remove-punctuation
-                      (str:words line))))
+  (str:words (str:remove-punctuation line)))
 
 (defun tokenize-text (text)
   "Splits `TEXT' into lists of words corresponding to the lines from the
@@ -159,4 +160,3 @@ a list of categorizations corresponding to each chapter."
     (loop for index from 1 to (length categorization)
           do (format t "Chapter ~S: ~A~%"
                      index (related-string (nth index categorization))))))
-
