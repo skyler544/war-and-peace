@@ -92,12 +92,12 @@ between the indices."
 
 (defun calculate-category-density (category-words chapter)
   "Calculate the density of words from `category-words' that occur in `chapter'."
-  (let* ((indices (indices category-words chapter))
+  (let* ((indices (sort (indices category-words chapter) #'<))
          (distances (rec-distances indices '()))
          (total-distance (reduce #'+ distances)))
     (if (zerop total-distance)
         0.0
-        (/ total-distance (length chapter)))))
+        (/ total-distance (length indices)))))
 
 (defun categorize-chapter (chapter)
   "Return war if the density of war terms in `chapter' is higher than the density of peace terms in `chapter', else return peace."
