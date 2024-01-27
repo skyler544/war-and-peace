@@ -130,8 +130,8 @@ between the indices."
     (t (split-recursive (rest book) (append chapter (first book)) acc))))
 
 (defun split-chapters (book)
-    "Splits `BOOK' into chapters. The return value is a list of lists of
-strings; each inner list is the content of a chapter split into words."
+    "Splits `BOOK' into chapters and categorizes them. The return value is
+a list of categorizations corresponding to each chapter."
   (split-recursive book '() '()))
 
 ;; Output and Utility Functions
