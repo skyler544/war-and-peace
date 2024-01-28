@@ -58,3 +58,9 @@
                          (length (remove-if-not (lambda (category)
                                                   (equal 'peace category))
                                                 categorized-book)))))))
+
+(fiveam:test can-get-war-related-string
+  (fiveam:is (equal "war-related" (related-string 'war))))
+
+(fiveam:test can-get-peace-related-string
+  (fiveam:is (equal "peace-related" (related-string 'peace))))
