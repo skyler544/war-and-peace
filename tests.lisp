@@ -1,3 +1,5 @@
+;; Input / Transformation functions
+;; ----------------------------------------------------
 (fiveam:test can-read-file
   (fiveam:is (read-file "tests.lisp")))
 
@@ -25,6 +27,22 @@
                '("END" "OF" "THE" "PROJECT" "GUTENBERG" "EBOOK" "WAR" "AND" "PEACE")
                (trimmed-book)))))
 
+
+;; Chapter recognition
+;; ----------------------------------------------------
+(fiveam:test can-recognize-chapter
+  (fiveam:is (is-chapterp '("CHAPTER"))))
+
+(fiveam:test can-reject-non-chapter
+  (fiveam:is (not (is-chapterp '("FOO")))))
+
+(fiveam:test can-categorize-multiple-chapters
+  (fiveam:is (> (length (split-chapters (trimmed-book))) 0)))
+
+
+
+;; Categorization
+;; ----------------------------------------------------
 (fiveam:test can-filter-words
   (fiveam:is (not (member "lisp" (read-war-terms)))))
 
@@ -37,14 +55,6 @@
 (fiveam:test categorizes-peace-chapter-correctly
   (fiveam:is (equal 'peace (categorize-chapter '("love" "wealth" "food")))))
 
-(fiveam:test can-recognize-chapter
-  (fiveam:is (is-chapterp '("CHAPTER"))))
-
-(fiveam:test can-reject-non-chapter
-  (fiveam:is (not (is-chapterp '("FOO")))))
-
-(fiveam:test can-categorize-multiple-chapters
-  (fiveam:is (> (length (split-chapters (trimmed-book))) 0)))
 
 (fiveam:test can-categorize-every-chapter
   (fiveam:is (equal (length (split-chapters (trimmed-book))) 365)))
@@ -59,6 +69,8 @@
                                                   (equal 'peace category))
                                                 categorized-book)))))))
 
+;; Output functions
+;; ----------------------------------------------------
 (fiveam:test can-get-war-related-string
   (fiveam:is (equal "war-related" (related-string 'war))))
 
