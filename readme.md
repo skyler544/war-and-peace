@@ -15,7 +15,7 @@ $ sudo apt install sbcl
 Other distributions may or may not package SBCL; refer to the SBCL project's [getting started](https://www.sbcl.org/getting.html) page for more information.
 
 
-This program uses the [cl-str](https://github.com/vindarel/cl-str) library for string manipulation and [lparallel](https://github.com/lmj/lparallel) for multithreading map operations. [Quicklisp](https://www.quicklisp.org/beta/) is used for installing and loading dependencies. Detailed instructions for installing and using Quicklisp may be found on that project's homepage, but here is a quickstart guide:
+This program uses the [cl-str](https://github.com/vindarel/cl-str) library for string manipulation and [lparallel](https://github.com/lmj/lparallel) for multithreading map operations. Unit testing uses the [FiveAM](https://fiveam.common-lisp.dev/) testing library. [Quicklisp](https://www.quicklisp.org/beta/) is used for installing and loading dependencies. Detailed instructions for installing and using Quicklisp may be found on that project's homepage, but here is a quickstart guide:
 
 ```sh
 $ curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
@@ -37,4 +37,16 @@ Example:
 $ git clone https://github.com/skyler544/war-and-peace
 $ cd war-and-peace
 $ ./run.sh
+```
+
+## Testing
+
+The tests are executed via `test.sh`. This script loads the main program file but does not run it; instead, it runs the test suite and prints the results to standard out.
+
+Example:
+
+```sh
+$ git clone https://github.com/skyler544/war-and-peace
+$ cd war-and-peace
+$ ./test.sh
 ```
