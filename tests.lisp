@@ -37,4 +37,24 @@
 (fiveam:test categorizes-peace-chapter-correctly
   (fiveam:is (equal 'peace (categorize-chapter '("love" "wealth" "food")))))
 
+(fiveam:test can-recognize-chapter
+  (fiveam:is (is-chapterp '("CHAPTER"))))
 
+(fiveam:test can-reject-non-chapter
+  (fiveam:is (not (is-chapterp '("FOO")))))
+
+(fiveam:test can-categorize-multiple-chapters
+  (fiveam:is (> (length (split-chapters (trimmed-book))) 0)))
+
+(fiveam:test can-categorize-every-chapter
+  (fiveam:is (equal (length (split-chapters (trimmed-book))) 365)))
+
+(fiveam:test every-chapter-is-war-or-peace-related
+  (let ((categorized-book (split-chapters (trimmed-book))))
+    (fiveam:is (equal (length categorized-book)
+                      (+ (length (remove-if-not (lambda (category)
+                                                  (equal 'war category))
+                                                categorized-book))
+                         (length (remove-if-not (lambda (category)
+                                                  (equal 'peace category))
+                                                categorized-book)))))))
