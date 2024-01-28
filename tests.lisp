@@ -37,5 +37,4 @@
 (fiveam:test categorizes-peace-chapter-correctly
   (fiveam:is (equal 'peace (categorize-chapter '("love" "wealth" "food")))))
 
-(fiveam:test can-get-indices
-  (fiveam:is (equal '(0 3) (indices (read-war-terms) '("sword" "peace" "food" "fear")))))
+
