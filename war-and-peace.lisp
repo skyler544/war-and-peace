@@ -21,9 +21,6 @@
 (defun read-war-terms ()
   (read-file "war-terms"))
 
-(defun log-expression (expr)
-  (format t "~S~%" expr))
-
 ;; Tokenize text
 ;; ----------------------------------------------------
 (defun tokenize-line (line)
@@ -98,16 +95,6 @@ a list of categorizations corresponding to each chapter."
 
 ;; Output and Utility Functions
 ;; ----------------------------------------------------
-;; File output
-(defun write-to-file (content filename)
-  "Write `CONTENT' to `FILENAME', overwriting if necessary."
-  (with-open-file
-      (stream filename
-	      :direction :output    ;; Write to disk
-	      :if-exists :supersede ;; Overwrite the file
-	      :if-does-not-exist :create)
-    (format stream "~S" content)))
-
 (defun related-string (item)
   "Return war-related if `item' is war, else peace-related."
   (if (equal item 'war)
