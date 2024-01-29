@@ -105,7 +105,7 @@ a list of categorizations corresponding to each chapter."
 (defun output-categorization ()
   "Categorize the book and output the categorization to standard out."
   (let ((categorization (split-chapters (trimmed-book)))
-        (count 0))
+        (count 1))
     (mapcar (lambda (category)
                (format t "Chapter ~S: ~A~%" count (related-string category))
                (setf count (+ 1 count)))
